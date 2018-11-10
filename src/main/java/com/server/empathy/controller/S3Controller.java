@@ -2,6 +2,7 @@ package com.server.empathy.controller;
 
 import com.server.empathy.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,10 +15,15 @@ public class S3Controller {
 
     private final S3Uploader s3Uploader;
 
-    @PostMapping("/upload")
+    @GetMapping("/upload")
+    public String checkGet(){
+        return "upload";
+    }
+
+    @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE , produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseBody
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
-        return s3Uploader.upload(multipartFile, "static");
+        return s3Uploader.upload(multipartFile, "filter");
     }
 
 }
