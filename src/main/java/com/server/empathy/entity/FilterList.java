@@ -1,12 +1,13 @@
 package com.server.empathy.entity;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Table(name = "filter_list_tbl")
 public class FilterList {

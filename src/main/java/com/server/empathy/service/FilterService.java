@@ -1,6 +1,7 @@
 package com.server.empathy.service;
 
 import com.server.empathy.dto.in.CreateFilterDto;
+import com.server.empathy.dto.out.FilterListDto;
 import com.server.empathy.entity.Filter;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface FilterService {
     void addFilterType(String name);
 
     List<Filter> getFilterListByFilter(String filter);
-    Map<String,List<Filter>> getAllFilter();
+    FilterListDto getAllFilter();
     void createFilter(CreateFilterDto dto);
 
 

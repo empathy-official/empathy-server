@@ -1,6 +1,7 @@
 package com.server.empathy.controller;
 
 import com.server.empathy.dto.in.CreateFilterDto;
+import com.server.empathy.dto.out.FilterListDto;
 import com.server.empathy.entity.Filter;
 import com.server.empathy.exception.BaseException;
 import com.server.empathy.service.FilterService;
@@ -20,7 +21,7 @@ public class FilterController {
     FilterService filterService;
 
     @GetMapping("/")
-    public Map<String,List<Filter>> getAllFilter(){
+    public FilterListDto getAllFilter(){
         return filterService.getAllFilter();
     }
 

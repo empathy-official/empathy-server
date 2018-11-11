@@ -1,6 +1,8 @@
 package com.server.empathy.service;
 
 import com.server.empathy.dto.in.CreateFilterDto;
+import com.server.empathy.dto.out.FilterListDto;
+import com.server.empathy.dto.out.FilterListEachDto;
 import com.server.empathy.entity.Filter;
 import com.server.empathy.entity.FilterList;
 import com.server.empathy.repository.FilterListRepository;
@@ -32,20 +34,34 @@ public class FilterImpl implements FilterService{
     }
 
     @Override
-    public Map<String,List<Filter>> getAllFilter() {
+    public FilterListDto getAllFilter() {
 
         Map<String,List<Filter>> filterMap = new HashMap<>();
+        List<FilterListEachDto> result = new ArrayList<>();
 
         filterListRepository.findAll().forEach(filterList->{
             List<Filter> temp = new ArrayList<>();
             filterMap.put(filterList.getFilterName() , temp);
+
         });
 
         filterRepository.findAll().forEach(filter -> {
             filterMap.get(filter.getType()).add(filter);
+
         });
 
-        return filterMap;
+//        return filterMap;
+
+        for(Map.Entry<String,List<Filter>> entry : filterMap.entrySet()){
+            result.add(
+                    FilterListEachDto.builder()
+                            .filterType(entry.getKey())
+                            .filters(entry.getValue())
+                            .build()
+            );
+        }
+
+        return FilterListDto.builder().filterList(result).build();
     }
 
 
