@@ -1,23 +1,25 @@
 package com.server.empathy.service;
 
 import com.server.empathy.dto.in.CreateFilterDto;
+import com.server.empathy.dto.in.UpdateFilterImageDto;
+import com.server.empathy.dto.in.UpdateFilterInfoDto;
 import com.server.empathy.dto.out.FilterListDto;
 import com.server.empathy.dto.out.FilterListEachDto;
 import com.server.empathy.entity.Filter;
 import com.server.empathy.entity.FilterList;
+import com.server.empathy.exception.NotFoundException;
 import com.server.empathy.repository.FilterListRepository;
 import com.server.empathy.repository.FilterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class FilterImpl implements FilterService{
 
+    @Autowired
+    S3Uploader s3Uploader;
     @Autowired
     FilterRepository filterRepository;
     @Autowired
@@ -73,9 +75,56 @@ public class FilterImpl implements FilterService{
                 .name(dto.getName())
                 .standard(dto.getStandard())
                 .gravity(dto.getGravity())
-                .alingLeft(dto.getAlignLeft().toLowerCase().equals("true"))
+                .alignLeft(dto.getAlignLeft().toLowerCase().equals("true"))
                 .build();
 
         filterRepository.save(filt);
     }
+
+    @Override
+    public void updateFilterInfo(UpdateFilterInfoDto dto) {
+//        Optional<Filter> check  = filterRepository.findById(dto.getTargetFilterId());
+//        Filter target;
+//        if(check.isPresent()) target = check.get();
+//        else throw new NotFoundException();
+
+        Filter target = filterRepository.findById(dto.getTargetFilterId())
+                .orElseThrow(() -> new NotFoundException());
+
+        if(dto.getAlignLeft() != null) {
+            boolean val = dto.getAlignLeft().equals("true")? true : false;
+            target.setAlignLeft(val);
+        }
+        if(dto.getStandard() != null) { target.setStandard(dto.getStandard()); }
+        if(dto.getGravity() != null) { target.setGravity(dto.getGravity()); }
+        if(dto.getName() != null) { target.setName(dto.getName()); }
+
+        filterRepository.save(target);
+    }
+
+    @Override
+    public void updateFilterImage(UpdateFilterImageDto dto) {
+        Filter target = filterRepository.findById(dto.getTargetFilterId())
+                .orElseThrow(() -> new NotFoundException());
+
+        if(target.getImageURL() == null){
+            String firstUrl;
+            try {
+                firstUrl = s3Uploader.upload(dto.getImage(),"filter");
+                target.setImageURL(firstUrl);
+                filterRepository.save(target);
+            } catch (Exception e) { System.out.println(e); }
+            return;
+        }
+
+        String newUrl;
+        try {
+            s3Uploader.deleteS3(target.getImageURL());
+            newUrl = s3Uploader.upload(dto.getImage(),"filter");
+            target.setImageURL(newUrl);
+            filterRepository.save(target);
+        }catch (Exception e) { System.out.println(e); }
+    }
+
+
 }

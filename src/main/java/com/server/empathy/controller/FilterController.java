@@ -1,17 +1,17 @@
 package com.server.empathy.controller;
 
 import com.server.empathy.dto.in.CreateFilterDto;
+import com.server.empathy.dto.in.UpdateFilterImageDto;
+import com.server.empathy.dto.in.UpdateFilterInfoDto;
 import com.server.empathy.dto.out.FilterListDto;
-import com.server.empathy.entity.Filter;
 import com.server.empathy.exception.BaseException;
 import com.server.empathy.service.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping({ "/filter/" , "/filter" })
@@ -39,10 +39,36 @@ public class FilterController {
     @PostMapping("/")
     public void createFilter(
             @Valid @RequestBody CreateFilterDto dto ,
-            BindingResult result
+            BindingResult bindingResult
     ){
-        if(result.hasErrors()) throw new BaseException();
+        if(bindingResult.hasErrors()) throw new BaseException();
         filterService.createFilter(dto);
 
+    }
+
+    // update Filter
+    // image 도 한번에 바꿀수 있는지 확인해야함 -> 안된다 이미지 따로
+    @PatchMapping("/info")
+    public void patchFilterInfo(
+            @Valid @RequestBody UpdateFilterInfoDto dto ,
+            BindingResult bindingResult
+    ){
+        if(bindingResult.hasErrors()) throw new BaseException();
+        filterService.updateFilterInfo(dto);
+    }
+
+    // update Filter Image
+    @PatchMapping("/iamge")
+    public void patchFilterImage(
+            @RequestParam("targetFilterId") Long targetId ,
+            @RequestParam("image") MultipartFile multipartFile
+    ){
+
+        filterService.updateFilterImage(
+                UpdateFilterImageDto.builder()
+                        .image(multipartFile)
+                        .targetFilterId(targetId)
+                        .build()
+        );
     }
 }

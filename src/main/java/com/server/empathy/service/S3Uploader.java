@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -54,7 +55,9 @@ public class S3Uploader {
 
 
     private String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + uploadFile.getName();
+        Date date = new Date();
+        String inDate = String.valueOf(date.getTime()) + "_";
+        String fileName = dirName + "/" + inDate + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return uploadImageUrl;

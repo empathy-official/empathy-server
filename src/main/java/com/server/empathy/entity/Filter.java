@@ -23,7 +23,7 @@ public class Filter {
     private String standard;
     @Column(length = 50)
     private String gravity;
-    private Boolean alingLeft;
+    private Boolean alignLeft;
     private String imageURL;
 
 }
