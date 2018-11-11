@@ -3,6 +3,7 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 application-dev.properties
+src/test/java/
 
 ### STS ###
 .apt_generated

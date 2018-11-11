@@ -2,6 +2,7 @@ package com.server.empathy.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,25 @@ public class S3Uploader {
 
         return upload(uploadFile, dirName);
     }
+
+    public void deleteS3(String objcetUrl) {
+
+        int idx = objcetUrl.indexOf(".com/");
+        String targetName = objcetUrl.substring(idx+5);
+
+
+        try{
+            // DeleteObjectsRequest 를 사용해야 한다. 아니면 안돼...
+//            amazonS3Client.deleteObject(bucket,decodedName);
+
+            DeleteObjectsRequest delObjReq = new DeleteObjectsRequest(bucket).withKeys(targetName);
+            amazonS3Client.deleteObjects(delObjReq);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
 
     private String upload(File uploadFile, String dirName) {
         String fileName = dirName + "/" + uploadFile.getName();
