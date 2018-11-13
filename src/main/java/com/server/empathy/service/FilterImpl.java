@@ -6,9 +6,9 @@ import com.server.empathy.dto.in.UpdateFilterInfoDto;
 import com.server.empathy.dto.out.FilterListDto;
 import com.server.empathy.dto.out.FilterListEachDto;
 import com.server.empathy.entity.Filter;
-import com.server.empathy.entity.FilterList;
+import com.server.empathy.entity.FilterType;
 import com.server.empathy.exception.NotFoundException;
-import com.server.empathy.repository.FilterListRepository;
+import com.server.empathy.repository.FilterTypeRepository;
 import com.server.empathy.repository.FilterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,42 @@ public class FilterImpl implements FilterService{
     @Autowired
     FilterRepository filterRepository;
     @Autowired
-    FilterListRepository filterListRepository;
+    FilterTypeRepository filterTypeRepository;
+
+    // ***************
+    // Filter Type
+    // ***************
+    @Override
+    public List<FilterType> getAllFilterType() {
+        List<FilterType> result = new ArrayList<>();
+        filterTypeRepository.findAll().forEach(filterType -> {
+            result.add(filterType);
+        });
+        return result;
+    }
 
     @Override
     public void addFilterType(String name) {
-        filterListRepository.save(FilterList.builder().filterName(name).build());
+        filterTypeRepository.save(FilterType.builder().filterTypeName(name).build());
     }
 
+    @Override
+    public void patchFilterTypeItem(FilterType item) {
+        FilterType tempType = filterTypeRepository.findById(item.getFilterListId())
+                .orElseThrow(()->new NotFoundException());
+        tempType.setFilterTypeName(item.getFilterTypeName());
+        filterTypeRepository.save(tempType);
+    }
+
+    @Override
+    public void deleteFilterListItem(Long filterTypeId) {
+        FilterType tempFilterType = filterTypeRepository.findById(filterTypeId)
+                .orElseThrow(()->new NotFoundException());
+        filterTypeRepository.delete(tempFilterType);
+    }
+    // ***************
+    // Filter
+    // ***************
     @Override
     public List<Filter> getFilterListByFilter(String filter) {
         return filterRepository.findFilterByType(filter);
@@ -41,9 +70,9 @@ public class FilterImpl implements FilterService{
         Map<String,List<Filter>> filterMap = new HashMap<>();
         List<FilterListEachDto> result = new ArrayList<>();
 
-        filterListRepository.findAll().forEach(filterList->{
+        filterTypeRepository.findAll().forEach(filterType ->{
             List<Filter> temp = new ArrayList<>();
-            filterMap.put(filterList.getFilterName() , temp);
+            filterMap.put(filterType.getFilterTypeName() , temp);
 
         });
 
@@ -126,5 +155,13 @@ public class FilterImpl implements FilterService{
         }catch (Exception e) { System.out.println(e); }
     }
 
-
+    @Override
+    public void deleteFilter(Long filterId) {
+        Filter tempFilter = filterRepository.findById(filterId)
+                .orElseThrow(()->new NotFoundException());
+        if(tempFilter.getImageURL() != null){
+            s3Uploader.deleteS3(tempFilter.getImageURL());
+        }
+        filterRepository.deleteById(tempFilter.getFilterId());
+    }
 }

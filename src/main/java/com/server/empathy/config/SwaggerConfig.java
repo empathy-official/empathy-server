@@ -30,7 +30,7 @@ public class SwaggerConfig {
                 .title("Empathy")
                 .description("SK Empathy Project")
                 .termsOfServiceUrl("https://github.com/empathy-dev/empathy-server")
-                .contact(new Contact("Empathy Server", "https://github.com/mash-up-kr/Groby", "mashupdutchmarket@gmail.com"))
+                .contact(new Contact("Empathy Server", "https://github.com/empathy-dev/empathy-server/wiki", "sopthfg@gmail.com"))
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .version("1.0")
