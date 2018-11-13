@@ -26,22 +26,22 @@ import java.util.Optional;
 @Component
 public class S3Uploader {
 
-//    private final AmazonS3Client amazonS3Client;
-    private AmazonS3 s3client;
+    private final AmazonS3Client amazonS3Client;
+//    private AmazonS3 s3client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String secretKey;
+//    @Value("${cloud.aws.credentials.accessKey}")
+//    private String accessKey;
+//    @Value("${cloud.aws.credentials.secretKey}")
+//    private String secretKey;
 
 
-    @PostConstruct
-    private void initializeAmazon() {
-        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-        this.s3client = new AmazonS3Client(credentials);
-    }
+//    @PostConstruct
+//    private void initializeAmazon() {
+//        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+//        this.s3client = new AmazonS3Client(credentials);
+//    }
 
 
     // dirname -> bucket name and folder
@@ -63,8 +63,8 @@ public class S3Uploader {
 //            amazonS3Client.deleteObject(bucket,decodedName);
 
             DeleteObjectsRequest delObjReq = new DeleteObjectsRequest(bucket).withKeys(targetName);
-            s3client.deleteObjects(delObjReq);
-//            amazonS3Client.deleteObjects(delObjReq);
+//            s3client.deleteObjects(delObjReq);
+            amazonS3Client.deleteObjects(delObjReq);
 
         } catch (Exception e) {
             System.out.println(e);
@@ -82,11 +82,11 @@ public class S3Uploader {
     }
 
     private String putS3(File uploadFile, String fileName) {
-        s3client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3client.getUrl(bucket, fileName).toString();
+//        s3client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+//        return s3client.getUrl(bucket, fileName).toString();
 
-//        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
-//        return amazonS3Client.getUrl(bucket, fileName).toString();
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+        return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
     private void removeNewFile(File targetFile) {
