@@ -105,6 +105,7 @@ public class FilterImpl implements FilterService{
                 .standard(dto.getStandard())
                 .gravity(dto.getGravity())
                 .alignLeft(dto.getAlignLeft().toLowerCase().equals("true"))
+//                .alignLeft(dto.getAlignLeft())
                 .build();
 
         filterRepository.save(filt);

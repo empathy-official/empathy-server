@@ -36,7 +36,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.cloud:spring-cloud-starter-aws')
 
-    compile 'com.amazonaws:aws-java-sdk:1.11.447'
+//    compile 'com.amazonaws:aws-java-sdk:1.11.447'
 
     runtime('mysql:mysql-connector-java')
     compileOnly('org.projectlombok:lombok')
