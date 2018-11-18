@@ -1,5 +1,6 @@
-package com.server.empathy.dto.out;
+package com.server.empathy.dto.out.filter;
 
+import com.server.empathy.entity.Filter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FilterListDto {
-    private List<FilterListEachDto> filterList;
+public class FilterListEachDto {
+    private String filterType;
+    private List<Filter> filters;
 }

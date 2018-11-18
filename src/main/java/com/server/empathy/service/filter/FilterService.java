@@ -1,9 +1,9 @@
-package com.server.empathy.service;
+package com.server.empathy.service.filter;
 
-import com.server.empathy.dto.in.CreateFilterDto;
-import com.server.empathy.dto.in.UpdateFilterImageDto;
-import com.server.empathy.dto.in.UpdateFilterInfoDto;
-import com.server.empathy.dto.out.FilterListDto;
+import com.server.empathy.dto.in.filter.CreateFilterDto;
+import com.server.empathy.dto.in.filter.UpdateFilterImageDto;
+import com.server.empathy.dto.in.filter.UpdateFilterInfoDto;
+import com.server.empathy.dto.out.filter.FilterListDto;
 import com.server.empathy.entity.Filter;
 import com.server.empathy.entity.FilterType;
 

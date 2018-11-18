@@ -1,12 +1,12 @@
 package com.server.empathy.controller;
 
-import com.server.empathy.dto.in.CreateFilterDto;
-import com.server.empathy.dto.in.UpdateFilterImageDto;
-import com.server.empathy.dto.in.UpdateFilterInfoDto;
-import com.server.empathy.dto.out.FilterListDto;
+import com.server.empathy.dto.in.filter.CreateFilterDto;
+import com.server.empathy.dto.in.filter.UpdateFilterImageDto;
+import com.server.empathy.dto.in.filter.UpdateFilterInfoDto;
+import com.server.empathy.dto.out.filter.FilterListDto;
 import com.server.empathy.entity.FilterType;
 import com.server.empathy.exception.BaseException;
-import com.server.empathy.service.FilterService;
+import com.server.empathy.service.filter.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.server.empathy.dto.in;
+package com.server.empathy.dto.in.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UpdateFilterInfoDto {
+@Data
+public class CreateUserDto {
     @NotNull
-    private Long targetFilterId;
     private String name;
-    private String standard;
-    private String gravity;
-    private String alignLeft;
+//    @NotNull
+    private String loginApi;
+    private String profileUrl;
 }
