@@ -53,9 +53,11 @@ public class FilterController {
     // Filter
     // ***************
     @GetMapping("/")
-    public FilterListDto getAllFilter(){
-        return filterService.getAllFilter();
-    }
+    public FilterListDto getAllFilter(){ return filterService.getAllFilter(); }
+    @GetMapping("/pose")
+    public FilterListDto getPoseFilter(){ return filterService.getFilterByType("pose"); }
+    @GetMapping("/origin")
+    public FilterListDto getFilter(){ return filterService.getFilterByType("original"); }
 
     // 그 후 있는 filterListName에 대해서 filter를 만든다.
     // 사실 순서가 바뀌어도 상관은 없다.

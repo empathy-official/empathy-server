@@ -23,6 +23,7 @@ public interface FilterService {
     // Filter
     // ***************
     FilterListDto getAllFilter();
+    FilterListDto getFilterByType(String type);
     void createFilter(CreateFilterDto dto);
     void updateFilterInfo(UpdateFilterInfoDto dto);
     void updateFilterImage(UpdateFilterImageDto dto);

@@ -1,11 +1,15 @@
 package com.server.empathy.dto.in;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class CreateFilterDto {
     @NotNull
