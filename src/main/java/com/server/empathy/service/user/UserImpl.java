@@ -7,12 +7,11 @@ import com.server.empathy.entity.User;
 import com.server.empathy.exception.NotFoundException;
 import com.server.empathy.repository.UserRepository;
 import com.server.empathy.service.TimeStampUtil;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserImpl implements UserService{
 
     @Autowired
     UserRepository userRepository;
