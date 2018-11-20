@@ -7,6 +7,7 @@ import com.server.empathy.dto.out.filter.FilterListDto;
 import com.server.empathy.dto.out.filter.FilterListEachDto;
 import com.server.empathy.entity.Filter;
 import com.server.empathy.entity.FilterType;
+import com.server.empathy.exception.BaseException;
 import com.server.empathy.exception.NotFoundException;
 import com.server.empathy.repository.FilterTypeRepository;
 import com.server.empathy.repository.FilterRepository;
@@ -175,7 +176,9 @@ public class FilterImpl implements FilterService{
             newUrl = s3Uploader.upload(dto.getImage(),"filter");
             target.setImageURL(newUrl);
             filterRepository.save(target);
-        }catch (Exception e) { System.out.println(e); }
+        }catch (Exception e) {
+            throw new BaseException(e.getMessage());
+        }
     }
 
     @Override
