@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -14,8 +15,10 @@ public class CreateJourneyDto {
     private Long ownerId;
     private String title;
     private String contents;
-    private Location location;
-    private String imageUrl;
+    private String location;
+    private Location locationEnum;
+//    private String imageUrl;
+    private MultipartFile file;
 
 
 }
