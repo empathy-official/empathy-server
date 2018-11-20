@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "filter_tbl")
 public class Filter {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long filterId;

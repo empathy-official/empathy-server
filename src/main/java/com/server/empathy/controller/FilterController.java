@@ -1,12 +1,12 @@
 package com.server.empathy.controller;
 
-import com.server.empathy.dto.in.CreateFilterDto;
-import com.server.empathy.dto.in.UpdateFilterImageDto;
-import com.server.empathy.dto.in.UpdateFilterInfoDto;
-import com.server.empathy.dto.out.FilterListDto;
+import com.server.empathy.dto.in.filter.CreateFilterDto;
+import com.server.empathy.dto.in.filter.UpdateFilterImageDto;
+import com.server.empathy.dto.in.filter.UpdateFilterInfoDto;
+import com.server.empathy.dto.out.filter.FilterListDto;
 import com.server.empathy.entity.FilterType;
 import com.server.empathy.exception.BaseException;
-import com.server.empathy.service.FilterService;
+import com.server.empathy.service.filter.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -53,9 +53,11 @@ public class FilterController {
     // Filter
     // ***************
     @GetMapping("/")
-    public FilterListDto getAllFilter(){
-        return filterService.getAllFilter();
-    }
+    public FilterListDto getAllFilter(){ return filterService.getAllFilter(); }
+    @GetMapping("/pose")
+    public FilterListDto getPoseFilter(){ return filterService.getFilterByType("pose"); }
+    @GetMapping("/origin")
+    public FilterListDto getFilter(){ return filterService.getFilterByType("original"); }
 
     // 그 후 있는 filterListName에 대해서 filter를 만든다.
     // 사실 순서가 바뀌어도 상관은 없다.

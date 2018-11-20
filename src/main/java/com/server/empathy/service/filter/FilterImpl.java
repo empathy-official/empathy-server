@@ -1,15 +1,16 @@
-package com.server.empathy.service;
+package com.server.empathy.service.filter;
 
-import com.server.empathy.dto.in.CreateFilterDto;
-import com.server.empathy.dto.in.UpdateFilterImageDto;
-import com.server.empathy.dto.in.UpdateFilterInfoDto;
-import com.server.empathy.dto.out.FilterListDto;
-import com.server.empathy.dto.out.FilterListEachDto;
+import com.server.empathy.dto.in.filter.CreateFilterDto;
+import com.server.empathy.dto.in.filter.UpdateFilterImageDto;
+import com.server.empathy.dto.in.filter.UpdateFilterInfoDto;
+import com.server.empathy.dto.out.filter.FilterListDto;
+import com.server.empathy.dto.out.filter.FilterListEachDto;
 import com.server.empathy.entity.Filter;
 import com.server.empathy.entity.FilterType;
 import com.server.empathy.exception.NotFoundException;
 import com.server.empathy.repository.FilterTypeRepository;
 import com.server.empathy.repository.FilterRepository;
+import com.server.empathy.service.S3Uploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,23 +67,15 @@ public class FilterImpl implements FilterService{
 
     @Override
     public FilterListDto getAllFilter() {
-
         Map<String,List<Filter>> filterMap = new HashMap<>();
-        List<FilterListEachDto> result = new ArrayList<>();
-
         filterTypeRepository.findAll().forEach(filterType ->{
             List<Filter> temp = new ArrayList<>();
             filterMap.put(filterType.getFilterTypeName() , temp);
-
         });
-
         filterRepository.findAll().forEach(filter -> {
             filterMap.get(filter.getType()).add(filter);
-
         });
-
-//        return filterMap;
-
+        List<FilterListEachDto> result = new ArrayList<>();
         for(Map.Entry<String,List<Filter>> entry : filterMap.entrySet()){
             result.add(
                     FilterListEachDto.builder()
@@ -91,10 +84,39 @@ public class FilterImpl implements FilterService{
                             .build()
             );
         }
-
         return FilterListDto.builder().filterList(result).build();
     }
 
+    @Override
+    public FilterListDto getFilterByType(String type) {
+        Map<String,List<Filter>> filterMap = new HashMap<>();
+        filterTypeRepository.findAll().forEach(filterType ->{
+            List<Filter> temp = new ArrayList<>();
+            filterMap.put(filterType.getFilterTypeName() , temp);
+        });
+        filterRepository.findAll().forEach(filter -> {
+            filterMap.get(filter.getType()).add(filter);
+        });
+        List<FilterListEachDto> result = new ArrayList<>();
+        for(Map.Entry<String,List<Filter>> entry : filterMap.entrySet()){
+            if(type.equals("pose") && entry.getKey().equals("pose")) {
+                result.add(
+                        FilterListEachDto.builder()
+                                .filterType(entry.getKey())
+                                .filters(entry.getValue())
+                                .build()
+                );
+            } else if (type.equals("original") && !entry.getKey().equals("pose") ) {
+                result.add(
+                        FilterListEachDto.builder()
+                                .filterType(entry.getKey())
+                                .filters(entry.getValue())
+                                .build()
+                );
+            } else { }
+        }
+        return FilterListDto.builder().filterList(result).build();
+    }
 
     @Override
     public void createFilter(CreateFilterDto dto) {

@@ -27,8 +27,7 @@ public class User {
     private String profileUrl;
     // 일대다 피드 연결
     // [Journey list]
-    @OneToMany(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
-    @JoinColumn(name = "jId") // foreign key check
+    @OneToMany(mappedBy = "owner" ,cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     private List<Journey> journeyList;
     @CreationTimestamp
     private Timestamp creationDate;

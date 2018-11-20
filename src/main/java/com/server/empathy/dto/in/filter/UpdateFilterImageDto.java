@@ -1,4 +1,4 @@
-package com.server.empathy.dto.in;
+package com.server.empathy.dto.in.filter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
