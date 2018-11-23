@@ -8,6 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface JourneyRepository extends CrudRepository<Journey,Long> {
     Page<Journey> findByLocationCode(int locationCode , Pageable paging);
-    Page<Journey> findByOwner(User owner);
+//    Page<Journey> findByOwner(User owner);
 
 }
