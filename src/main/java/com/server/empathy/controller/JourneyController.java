@@ -7,6 +7,7 @@ import com.server.empathy.dto.out.journey.GetJourneySimpleDto;
 import com.server.empathy.entity.Location;
 import com.server.empathy.entity.User;
 import com.server.empathy.exception.BaseException;
+import com.server.empathy.repository.JourneyRepository;
 import com.server.empathy.service.journey.JourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
