@@ -5,12 +5,9 @@ import com.server.empathy.dto.in.journey.PatchJourneyInfoDto;
 import com.server.empathy.dto.out.journey.GetJourneyDto;
 import com.server.empathy.dto.out.journey.GetJourneySimpleDto;
 import com.server.empathy.entity.Location;
-import com.server.empathy.entity.User;
 import com.server.empathy.exception.BaseException;
-import com.server.empathy.repository.JourneyRepository;
 import com.server.empathy.service.journey.JourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +26,15 @@ public class JourneyController {
     ){
         Long journeyId = Long.parseLong(targetId);
         return journeyService.getJourney(journeyId);
+    }
+
+    @GetMapping("/myjourney/{ownerId}")
+    public List<GetJourneyDto> getMyJourney(
+            @PathVariable(name = "ownerId") String targetId
+    ){
+        Long ownerId = Long.parseLong(targetId);
+
+        return journeyService.getMyJourneyList(ownerId , 0 , 20);
     }
 
     @GetMapping("/location/{locationEnum}")

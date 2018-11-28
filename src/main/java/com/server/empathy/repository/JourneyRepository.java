@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface JourneyRepository extends CrudRepository<Journey,Long> {
     Page<Journey> findByLocationCode(int locationCode , Pageable paging);
-//    Page<Journey> findByOwner(User owner);
+//    Page<Journey> findByOwnerId(Long ownerId , Pageable paging);
+    List<Journey> findAllByOwner(User owner , Pageable paging);
 
 }

@@ -77,9 +77,30 @@ public class JourneyImpl implements JourneyService{
     }
 
     @Override
+    public List<GetJourneyDto> getMyJourneyList(Long userId , int page , int size) {
+        User owner = userRepository.findById(userId)
+                .orElseThrow(NotFoundException::new);
+        Pageable paging  = new PageRequest( page, size, Sort.Direction.DESC, "jId");
+        List<Journey> dbResult = journeyRepository.findAllByOwner(owner, paging);
+        List<GetJourneyDto> result = new ArrayList<>();
+        dbResult.forEach( journey -> {
+            result.add(
+                    GetJourneyDto.builder()
+                            .title(journey.getTitle())
+                            .journeyId(journey.getJId())
+                            .imageUrl(journey.getImageUrl())
+                            .creationTime(TimeStampUtil.stampFormatSimple(journey.getCreationDate()))
+                            .build()
+            );
+        });
+
+        return result;
+    }
+
+    @Override
     public List<GetJourneySimpleDto> getJourneyByLocation(int locationCode , int page , int size) {
         // 역순으로 0페이지 5개씩
-        Pageable paging  = new PageRequest(page,size,Sort.Direction.DESC , "jId");
+        Pageable paging  = new PageRequest(page, size, Sort.Direction.DESC, "jId");
         List<GetJourneySimpleDto> result = new ArrayList<>();
         if(journeyRepository.findByLocationCode(locationCode,paging).getSize() == 0) {
             throw new NotFoundException();
