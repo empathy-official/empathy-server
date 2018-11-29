@@ -73,6 +73,7 @@ public class ImformationController {
         String creditCard; //
         String withPet;//
         String locationStr;//
+        String mapx,mapy;
 
         GetTourAPIDetailDto result = GetTourAPIDetailDto.builder().build();
 
@@ -85,6 +86,8 @@ public class ImformationController {
             locationStr = tempElement.get(0).select("addr1").text();
             imageURL = tempElement.get(0).select("firstimage").text();
             overviewText = tempElement.get(0).select("overview").text();
+            mapx = tempElement.get(0).select("mapx").text();
+            mapy = tempElement.get(0).select("mapy").text();
 
             targetURL = makeDetailURL(apiKey,2,contentType,targetId);
             document = Jsoup.connect(targetURL).get();
@@ -109,6 +112,8 @@ public class ImformationController {
                     .dayOff(dayOff)
                     .withPet(withPet)
                     .creditCard(creditCard)
+                    .mapx(mapx)
+                    .mapy(mapy)
                     .build();
 
 

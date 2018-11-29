@@ -18,4 +18,7 @@ public class GetTourAPIDetailDto {
     private String creditCard;
     private String withPet;
     private String locationStr;
+    private String mapx;
+    private String mapy;
+
 }
