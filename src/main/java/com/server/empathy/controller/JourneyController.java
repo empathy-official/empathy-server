@@ -4,13 +4,26 @@ import com.server.empathy.dto.in.journey.CreateJourneyDto;
 import com.server.empathy.dto.in.journey.PatchJourneyInfoDto;
 import com.server.empathy.dto.out.journey.GetJourneyDto;
 import com.server.empathy.dto.out.journey.GetJourneySimpleDto;
+import com.server.empathy.dto.out.journey.GetMainJourneyInfo;
+import com.server.empathy.entity.Journey;
 import com.server.empathy.entity.Location;
+import com.server.empathy.entity.User;
+import com.server.empathy.entity.WeekDaysKor;
 import com.server.empathy.exception.BaseException;
+import com.server.empathy.exception.NotFoundException;
+import com.server.empathy.repository.JourneyRepository;
+import com.server.empathy.repository.UserRepository;
+import com.server.empathy.service.TimeStampUtil;
 import com.server.empathy.service.journey.JourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,6 +32,10 @@ public class JourneyController {
 
     @Autowired
     JourneyService journeyService;
+    @Autowired
+    JourneyRepository journeyRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/{targetId}")
     public GetJourneyDto getJourney(
@@ -35,6 +52,48 @@ public class JourneyController {
         Long ownerId = Long.parseLong(targetId);
 
         return journeyService.getMyJourneyList(ownerId , 0 , 20);
+    }
+
+    @GetMapping("/main/{locationEnum}/{userId}")
+    public GetMainJourneyInfo getMainJourneyInformation(
+            @PathVariable(name = "locationEnum") String locationEnumStr ,
+            @PathVariable(name = "userId") String userId
+    ){
+        Location locEnum = Location.valueOf(locationEnumStr);
+        int locationEnumInt = locEnum.getCode();
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+
+        String imageURLStr = "https://s3.ap-northeast-2.amazonaws.com/onemoon-empathy-s3/back/firstMainImg.jpg";
+        String mainTextStr = "하루하루가\n모여 여정이 될 \n\n나의 오늘을\n기록해보세요";
+        String booleanStr = "true";
+
+        User owner = userRepository.findById(Long.parseLong(userId))
+                .orElseThrow(NotFoundException::new);
+        Pageable paging  = new PageRequest( 0, 5, Sort.Direction.DESC, "jId");
+        List<Journey> dbResult = journeyRepository.findAllByOwner(owner, paging);
+
+        // 처음일때
+        // https://s3.ap-northeast-2.amazonaws.com/onemoon-empathy-s3/back/firstMainImg.jpg
+        // 처음이 아닐때 마지막 사진을 가져온다.
+        if( dbResult.size() != 0 ){
+            Journey temp = dbResult.get(0);
+            booleanStr = "false";
+            imageURLStr = temp.getImageUrl();
+            String tempStr = TimeStampUtil.stampFormatSimple(temp.getCreationDate());
+            String resultStr = tempStr.substring(0,7)+"\n"+tempStr.substring(8,10) + "\n" + temp.getTitle();
+            mainTextStr = resultStr;
+        }
+
+        return GetMainJourneyInfo.builder()
+                .otherPeopleList(journeyService.getJourneyByLocation(locationEnumInt , 0 , 5))
+                .imageURL(imageURLStr)
+                .enumStr(locEnum.getValue())
+                .isFirst(booleanStr)
+                .mainText(mainTextStr)
+                .weekday(WeekDaysKor.getText(dayOfWeek-1))
+                .build();
     }
 
     @GetMapping("/location/{locationEnum}")
