@@ -2,6 +2,8 @@ package com.server.empathy.controller;
 
 import com.server.empathy.dto.out.info.GetTourAPIDetailDto;
 import com.server.empathy.dto.out.info.GetTourAPIItem;
+import com.server.empathy.dto.out.info.InfoAllianceDetailDto;
+import com.server.empathy.dto.out.info.InfoAllianceDto;
 import org.apache.http.entity.ContentType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -84,7 +86,8 @@ public class ImformationController {
             Elements tempElement = document.select("item");
             title = tempElement.get(0).select("title").text();
             locationStr = tempElement.get(0).select("addr1").text();
-            imageURL = tempElement.get(0).select("firstimage").text();
+            imageURL = tempElement.get(0).select("firstimage").text().equals("") ? "https://s3.ap-northeast-2.amazonaws.com/onemoon-empathy-s3/back/detailBase.jpg" : tempElement.get(0).select("firstimage").text();
+
             overviewText = tempElement.get(0).select("overview").text();
             mapx = tempElement.get(0).select("mapx").text();
             mapy = tempElement.get(0).select("mapy").text();
@@ -115,9 +118,6 @@ public class ImformationController {
                     .mapx(mapx)
                     .mapy(mapy)
                     .build();
-
-
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -127,12 +127,33 @@ public class ImformationController {
 
 
 
-//    @PostMapping("/alliance")
-//    public void createAlliance(
-//
-//    ){
-//
-//    }
+    @GetMapping("/alliance")
+    public InfoAllianceDto getAllianceInfo() {
+        return InfoAllianceDto.builder()
+                .imageURL("https://s3.ap-northeast-2.amazonaws.com/onemoon-empathy-s3/back/singer.jpg")
+                .kind("인디밴드")
+                .locatiionStr("서울시 성북구 석관동\n화랑로 30길-17")
+                .name("Ra'mie")
+                .targetId("1") // 임시 값
+                .build();
+    }
+
+    @GetMapping("/alliance/detail/{targetId}")
+    public InfoAllianceDetailDto getAllianceDetail(
+            @PathVariable(name = "targetId") String targetId
+    ) {
+        return InfoAllianceDetailDto.builder()
+                .imageURL("https://s3.ap-northeast-2.amazonaws.com/onemoon-empathy-s3/back/singer.jpg")
+                .title("Ra'mie")
+                .overview("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s")
+                .duration("11.10-11.31")
+                .playTime("13:00~14:30")
+                .priceInfo("평일-13,000원\n주말-15,000원")
+                .locationStr("서울시 성북구 석관동 화랑로 30길-17")
+                .mapx("126.981106")
+                .mapy("37.568477")
+                .build();
+    }
 
     private static String makeURL(String key, int type ,
                                   String mx, String my, String range,
