@@ -22,12 +22,14 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/")
-    public void createUser(
+    public Long createUser(
             @Valid @RequestBody CreateUserDto dto,
             BindingResult bindingResult
     ){
         if(bindingResult.hasErrors()) throw new BaseException();
-        userService.createUser(dto);
+        Long createdUserId = userService.createUser(dto);
+
+        return createdUserId;
     }
 
     @GetMapping("/info/{userId}")

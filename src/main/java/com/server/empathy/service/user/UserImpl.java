@@ -17,14 +17,15 @@ public class UserImpl implements UserService{
     UserRepository userRepository;
 
     @Override
-    public void createUser(CreateUserDto dto) {
+    public Long createUser(CreateUserDto dto) {
         User user = User.builder()
                 .name(dto.getName())
                 .loginApi( dto.getLoginApi() != null? dto.getLoginApi() : "basic")
                 .profileUrl( dto.getProfileUrl() != null? dto.getProfileUrl() : "URL")
                 .build();
 
-        userRepository.save(user);
+        User savedEntity = userRepository.save(user);
+        return savedEntity.getUserId();
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.server.empathy.dto.in.user.UpdateUserDto;
 import com.server.empathy.dto.out.user.GetUserDto;
 
 public interface UserService {
-    void createUser(CreateUserDto dto);
+    Long createUser(CreateUserDto dto);
     GetUserDto getUserInfo(Long userId);
     void updateUser(UpdateUserDto dto);
     void deleteUser(Long userId);
