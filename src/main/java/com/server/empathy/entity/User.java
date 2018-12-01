@@ -25,6 +25,7 @@ public class User {
     @Column(length = 10)
     private String loginApi;
     private String profileUrl;
+    private String token;
     // 일대다 피드 연결
     // [Journey list]
     @OneToMany(mappedBy = "owner" ,cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
