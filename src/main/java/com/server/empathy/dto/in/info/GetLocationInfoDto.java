@@ -1,4 +1,4 @@
-package com.server.empathy.dto.in.feed;
+package com.server.empathy.dto.in.info;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

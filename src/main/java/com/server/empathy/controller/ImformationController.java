@@ -4,12 +4,18 @@ import com.server.empathy.dto.out.info.GetTourAPIDetailDto;
 import com.server.empathy.dto.out.info.GetTourAPIItem;
 import com.server.empathy.dto.out.info.InfoAllianceDetailDto;
 import com.server.empathy.dto.out.info.InfoAllianceDto;
+import com.server.empathy.entity.Alliance;
+import com.server.empathy.exception.BaseException;
+import com.server.empathy.repository.AllianceRepository;
+import com.server.empathy.service.S3Uploader;
 import org.apache.http.entity.ContentType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,7 +150,7 @@ public class ImformationController {
     ) {
         return InfoAllianceDetailDto.builder()
                 .imageURL("https://s3.ap-northeast-2.amazonaws.com/onemoon-empathy-s3/back/singer.jpg")
-                .title("Ra'mie")
+                .title("퍼플버거")
                 .overview("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s")
                 .duration("11.10-11.31")
                 .playTime("13:00~14:30")
@@ -193,6 +199,49 @@ public class ImformationController {
         return result;
     }
 
+    @Autowired
+    AllianceRepository allianceRepository;
+    @Autowired
+    S3Uploader s3Uploader;
+
+    @PostMapping("/alliance")
+    public void craeteAlliance(
+            @RequestParam(value = "file") MultipartFile file,
+//            @RequestParam(value = "title") String title ,
+//            @RequestParam(value = "subTitle") String subTitle ,
+//            @RequestParam(value = "locationStr") String locationStr ,
+//            @RequestParam(value = "introduce") String introduce ,
+//            @RequestParam(value = "dayTime") String dayTime ,
+//            @RequestParam(value = "hourTime") String hourTime ,
+//            @RequestParam(value = "priceInfo") String priceInfo
+            @RequestPart(value = "title") String title ,
+            @RequestPart(value = "subTitle") String subTitle ,
+            @RequestPart(value = "locationStr") String locationStr ,
+            @RequestPart(value = "introduce") String introduce ,
+            @RequestPart(value = "dayTime") String dayTime ,
+            @RequestPart(value = "hourTime") String hourTime ,
+            @RequestPart(value = "priceInfo") String priceInfo
+    ){
+        try {
+            System.out.println(title);
+            System.out.println(subTitle);
+
+            String newUrl = s3Uploader.upload(file , "alliance");
+            Alliance temp = Alliance.builder()
+                    .imageURL(newUrl)
+                    .title(title)
+                    .subTitle(subTitle)
+                    .locationStr(locationStr)
+                    .introduce(introduce.replaceAll("(\r\n|\r|\n|\n\r)", "\n"))
+                    .dayTime(dayTime.replaceAll("(\r\n|\r|\n|\n\r)", "\n"))
+                    .hourTime(hourTime.replaceAll("(\r\n|\r|\n|\n\r)", "\n"))
+                    .priceInfo(priceInfo.replaceAll("(\r\n|\r|\n|\n\r)", "\n"))
+                    .build();
+            allianceRepository.save(temp);
+        } catch(Exception e) {
+            throw new BaseException(e.getMessage());
+        }
+    }
 
 
 

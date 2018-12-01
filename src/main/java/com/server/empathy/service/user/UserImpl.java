@@ -18,13 +18,13 @@ public class UserImpl implements UserService{
 
     @Override
     public Long createUser(CreateUserDto dto) {
-        User tempuser = userRepository.findByToken(dto.getToken());
+        User tempuser = userRepository.findByAppUserId(dto.getAppUserId());
         if(tempuser == null) {
             User user = User.builder()
                     .name(dto.getName())
                     .loginApi(dto.getLoginApi() != null ? dto.getLoginApi() : "basic")
                     .profileUrl(dto.getProfileUrl() != null ? dto.getProfileUrl() : "URL")
-                    .token(dto.getToken())
+                    .appUserId(dto.getAppUserId())
                     .build();
 
             User savedEntity = userRepository.save(user);

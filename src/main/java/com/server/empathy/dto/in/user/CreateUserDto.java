@@ -17,5 +17,5 @@ public class CreateUserDto {
 //    @NotNull
     private String loginApi;
     private String profileUrl;
-    private String token;
+    private String appUserId;
 }

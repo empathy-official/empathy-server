@@ -7,22 +7,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Builder
-//@Entity
-//@Table(name = "alliance_tbl")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "alliance_tbl")
 public class Alliance {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long allianceId;
-//    private String title;
-//    private String subTitle;
-//    private String locationStr;
-//    private String introduce;
-//    private String dayTime;
-//    private String hourTime;
-//    private String priceInfo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long allianceId;
+    private String imageURL;
+    private String title;
+    private String subTitle;
+    private String locationStr;
+    private String introduce;
+    private String dayTime;
+    private String hourTime;
+    private String priceInfo;
 
 }
