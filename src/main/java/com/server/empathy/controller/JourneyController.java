@@ -87,7 +87,7 @@ public class JourneyController {
         }
 
         return GetMainJourneyInfo.builder()
-                .otherPeopleList(journeyService.getJourneyByLocation(locationEnumInt , 0 , 5))
+                .otherPeopleList(journeyService.getJourneyByLocation(Long.parseLong(userId),locationEnumInt , 0 , 5))
                 .imageURL(imageURLStr)
                 .enumStr(locEnum.getValue())
                 .isFirst(booleanStr)
@@ -96,14 +96,14 @@ public class JourneyController {
                 .build();
     }
 
-    @GetMapping("/location/{locationEnum}")
-    public List<GetJourneySimpleDto> getJourneyByLocation(
-            @PathVariable(name = "locationEnum") String locationEnumStr
-    ){
-        int locationEnumInt = Location.valueOf(locationEnumStr).getCode();
-        // service ( locaenum ) pageable? > ok 5개씩?
-        return journeyService.getJourneyByLocation(locationEnumInt , 0 , 5);
-    }
+//    @GetMapping("/location/{locationEnum}")
+//    public List<GetJourneySimpleDto> getJourneyByLocation(
+//            @PathVariable(name = "locationEnum") String locationEnumStr
+//    ){
+//        int locationEnumInt = Location.valueOf(locationEnumStr).getCode();
+//        // service ( locaenum ) pageable? > ok 5개씩?
+//        return journeyService.getJourneyByLocation(locationEnumInt , 0 , 5);
+//    }
 
     @PostMapping("/")
     public void createJourney(
@@ -123,10 +123,6 @@ public class JourneyController {
             throw new BaseException("Enum값을 확인해주세요");
         }
         Long targetId = Long.parseLong(ownerId);
-
-        // file 이 제대로 들어오기는 함
-        // s3 logic 통해서 imageurl 만들어야 함
-
 
 
         CreateJourneyDto dto = CreateJourneyDto.builder()

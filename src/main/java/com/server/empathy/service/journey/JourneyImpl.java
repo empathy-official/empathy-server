@@ -98,22 +98,28 @@ public class JourneyImpl implements JourneyService{
     }
 
     @Override
-    public List<GetJourneySimpleDto> getJourneyByLocation(int locationCode , int page , int size) {
+    public List<GetJourneySimpleDto> getJourneyByLocation(Long userId, int locationCode , int page , int size) {
         // 역순으로 0페이지 5개씩
-        Pageable paging  = new PageRequest(page, size, Sort.Direction.DESC, "jId");
+//        Pageable paging  = new PageRequest(page, size, Sort.Direction.DESC, "jId");
         List<GetJourneySimpleDto> result = new ArrayList<>();
-        if(journeyRepository.findByLocationCode(locationCode,paging).getSize() == 0) {
-            throw new NotFoundException();
-        }
-        journeyRepository.findByLocationCode(locationCode,paging).forEach(journey -> {
-           result.add(
-                   GetJourneySimpleDto.builder()
-                   .journeyId(journey.getJId())
-                   .imageUrl(journey.getImageUrl())
-                   .ownerName(journey.getOwner().getName())
-                   .ownerProfileUrl(journey.getOwner().getProfileUrl())
-                   .build()
-           );
+//        if(journeyRepository.findByLocationCode(locationCode,paging).getSize() == 0) {
+//            throw new NotFoundException();
+//        }
+
+//        journeyRepository.findByLocationCode(locationCode,paging).forEach(journey -> {
+        journeyRepository.findByLocationCodeOrderByJIdDesc(locationCode).forEach(journey -> {
+
+            if( journey.getOwner().getUserId() != userId && result.size() <= 5 ){
+                result.add(
+                        GetJourneySimpleDto.builder()
+                                .journeyId(journey.getJId())
+                                .imageUrl(journey.getImageUrl())
+                                .ownerName(journey.getOwner().getName())
+                                .ownerProfileUrl(journey.getOwner().getProfileUrl())
+                                .build()
+                );
+            }
+
         });
         return result;
     }

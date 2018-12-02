@@ -58,7 +58,6 @@ public class ImformationController {
                                 .targetId(elements.get(i).select("contentid").text())
                                 .build()
                 );
-
             }
         } catch ( Exception e ) {
             System.out.println(e.getMessage());
@@ -223,9 +222,6 @@ public class ImformationController {
             @RequestPart(value = "priceInfo") String priceInfo
     ){
         try {
-            System.out.println(title);
-            System.out.println(subTitle);
-
             String newUrl = s3Uploader.upload(file , "alliance");
             Alliance temp = Alliance.builder()
                     .imageURL(newUrl)

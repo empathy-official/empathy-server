@@ -11,7 +11,7 @@ import java.util.List;
 public interface JourneyService {
     GetJourneyDto getJourney(Long journeyId);
     List<GetJourneyDto> getMyJourneyList(Long userId, int page, int size);
-    List<GetJourneySimpleDto> getJourneyByLocation(int locationCode ,int page , int size);
+    List<GetJourneySimpleDto> getJourneyByLocation(Long userId, int locationCode ,int page , int size);
     void createJourney(CreateJourneyDto dto);
     void updateJourneyInfo(PatchJourneyInfoDto dto);
     void updateJourneyImage(Long journeyId , MultipartFile file);
