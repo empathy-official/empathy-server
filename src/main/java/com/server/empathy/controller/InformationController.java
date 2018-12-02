@@ -36,9 +36,10 @@ public class InformationController {
             @PathVariable(name = "pageNumber") String pageNumber
     ){
 
-        String targetURL = makeURL(apiKey, 12,
-                "126.981106", "37.568477" , "1000" ,
-                10,1);
+
+        String targetURL = makeURL(apiKey, Integer.parseInt(contentType),
+                mapX, mapY , range ,
+                10,Integer.parseInt(pageNumber));
 
         List<GetTourAPIItem> result = new ArrayList<>();
 
@@ -72,9 +73,12 @@ public class InformationController {
             @PathVariable(name = "pageNumber") String pageNumber
     ){
 
-        String targetURL = makeURL(apiKey, 12,
-                "126.981106", "37.568477" , "1000" ,
-                10,1);
+//        String targetURL = makeURL(apiKey, 12,
+//                "126.981106", "37.568477" , "1000" ,
+//                10,1);
+        String targetURL = makeURL(apiKey, Integer.parseInt(contentType),
+                mapX, mapY , range ,
+                10,Integer.parseInt(pageNumber));
 
         List<GetTourAPIItem2> result = new ArrayList<>();
 
