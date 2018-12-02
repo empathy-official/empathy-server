@@ -1,9 +1,6 @@
 package com.server.empathy.controller;
 
-import com.server.empathy.dto.out.info.GetTourAPIDetailDto;
-import com.server.empathy.dto.out.info.GetTourAPIItem;
-import com.server.empathy.dto.out.info.InfoAllianceDetailDto;
-import com.server.empathy.dto.out.info.InfoAllianceDto;
+import com.server.empathy.dto.out.info.*;
 import com.server.empathy.entity.Alliance;
 import com.server.empathy.exception.BaseException;
 import com.server.empathy.repository.AllianceRepository;
@@ -22,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/info" , "/info/"})
-public class ImformationController {
+public class InformationController {
     @Value("${tourapi.key}")
     private String apiKey;
 
@@ -56,6 +53,43 @@ public class ImformationController {
                                 .title(elements.get(i).select("title").text())
                                 .addr(elements.get(i).select("addr1").text())
                                 .targetId(elements.get(i).select("contentid").text())
+                                .build()
+                );
+            }
+        } catch ( Exception e ) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
+    }
+
+    @GetMapping("/tourAPI2/{contentType}/{mapX}/{mapY}/{range}/{pageNumber}")
+    public List<GetTourAPIItem2> getTourAPI2(
+            @PathVariable(name = "contentType") String contentType ,
+            @PathVariable(name = "mapX") String mapX ,
+            @PathVariable(name = "mapY") String mapY ,
+            @PathVariable(name = "range") String range ,
+            @PathVariable(name = "pageNumber") String pageNumber
+    ){
+
+        String targetURL = makeURL(apiKey, 12,
+                "126.981106", "37.568477" , "1000" ,
+                10,1);
+
+        List<GetTourAPIItem2> result = new ArrayList<>();
+
+        try {
+            Document document = Jsoup.connect(targetURL).get();
+            Elements elements = document.select("item");
+            int eleSize = elements.size();
+            for(int i=0;i<eleSize;i++){
+                result.add(
+                        GetTourAPIItem2.builder()
+                                .imageURL(elements.get(i).select("firstimage").text())
+                                .title(elements.get(i).select("title").text())
+                                .addr(elements.get(i).select("addr1").text())
+                                .targetId(elements.get(i).select("contentid").text())
+                                .contentType(contentType)
                                 .build()
                 );
             }
@@ -138,7 +172,7 @@ public class ImformationController {
                 .imageURL("https://s3.ap-northeast-2.amazonaws.com/onemoon-empathy-s3/back/singer.jpg")
                 .kind("인디밴드")
                 .locatiionStr("서울시 성북구 석관동\n화랑로 30길-17")
-                .name("Ra'mie")
+                .name("퍼플버거")
                 .targetId("1") // 임시 값
                 .build();
     }
