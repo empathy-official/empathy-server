@@ -44,11 +44,15 @@ public class InformationController {
 //                10,Integer.parseInt(pageNumber));
 
         int newRange = Integer.parseInt(range);
-        if ( newRange < 500 ) {
-            newRange = 500;
+        if ( newRange <= 500 ) {
+            newRange = 1000;
+        } else if (newRange <= 1000) {
+            newRange = 1500;
+        } else {
+
         }
         String targetURL = makeURL(apiKey, Integer.parseInt(contentType),
-                mapY, mapX , String.valueOf(newRange) ,
+                mapY , mapX , String.valueOf(newRange) ,
                 10,Integer.parseInt(pageNumber));
 
         List<GetTourAPIItem> result = new ArrayList<>();
@@ -86,8 +90,16 @@ public class InformationController {
 //        String targetURL = makeURL(apiKey, 12,
 //                "126.981106", "37.568477" , "1000" ,
 //                10,1);
+        int newRange = Integer.parseInt(range);
+        if ( newRange <= 500 ) {
+            newRange = 1000;
+        } else if (newRange <= 1000) {
+            newRange = 1500;
+        } else {
+
+        }
         String targetURL = makeURL(apiKey, Integer.parseInt(contentType),
-                mapX, mapY , range ,
+                mapX, mapY , String.valueOf(newRange) ,
                 10,Integer.parseInt(pageNumber));
 
         List<GetTourAPIItem2> result = new ArrayList<>();
