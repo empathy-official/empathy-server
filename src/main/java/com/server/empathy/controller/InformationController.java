@@ -42,8 +42,13 @@ public class InformationController {
 //        String targetURL = makeURL(apiKey, Integer.parseInt(contentType),
 //                mapX, mapY , range ,
 //                10,Integer.parseInt(pageNumber));
+
+        int newRange = Integer.parseInt(range);
+        if ( newRange < 500 ) {
+            newRange = 500;
+        }
         String targetURL = makeURL(apiKey, Integer.parseInt(contentType),
-                mapY, mapX , range ,
+                mapY, mapX , String.valueOf(newRange) ,
                 10,Integer.parseInt(pageNumber));
 
         List<GetTourAPIItem> result = new ArrayList<>();
